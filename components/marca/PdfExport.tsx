@@ -181,9 +181,8 @@ export default function PdfExport({ brandData, onReset }: PdfExportProps) {
       </button>
       <button
         onClick={onReset}
-        className="btn-ghost"
+        className="btn-primary"
         type="button"
-        style={{ borderColor: 'rgba(255,255,255,0.3)', color: 'white' }}
       >
         ← GENERAR OTRA MARCA
       </button>
