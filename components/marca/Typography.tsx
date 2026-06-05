@@ -7,76 +7,70 @@ interface FontPair {
   style: string;
 }
 
-const FONT_PAIRS: Record<string, FontPair[]> = {
-  'Tecnología / Software': [
-    { heading: 'Space Grotesk', body: 'Inter', style: 'Tech Moderno' },
-    { heading: 'Syne', body: 'DM Sans', style: 'Futurista' },
-    { heading: 'Outfit', body: 'Manrope', style: 'Limpio' },
-  ],
-  'Salud y Bienestar': [
-    { heading: 'Cormorant Garamond', body: 'Nunito', style: 'Elegante Cálido' },
-    { heading: 'Lora', body: 'Source Sans 3', style: 'Confiable' },
-    { heading: 'Playfair Display', body: 'Lato', style: 'Premium' },
-  ],
-  'Educación': [
-    { heading: 'Merriweather', body: 'Open Sans', style: 'Académico' },
-    { heading: 'Libre Baskerville', body: 'Lato', style: 'Clásico' },
-    { heading: 'Raleway', body: 'Nunito', style: 'Moderno Accesible' },
-  ],
-  'Gastronomía / Restaurantes': [
-    { heading: 'Playfair Display', body: 'Lato', style: 'Clásico Elegante' },
-    { heading: 'Italiana', body: 'Raleway', style: 'Artesanal' },
-    { heading: 'Abril Fatface', body: 'Nunito Sans', style: 'Bold' },
-  ],
-  'Moda y Lifestyle': [
-    { heading: 'Cormorant', body: 'Jost', style: 'Editorial Fino' },
-    { heading: 'Bodoni Moda', body: 'DM Sans', style: 'Haute Couture' },
-    { heading: 'Josefin Sans', body: 'Raleway', style: 'Minimal Chic' },
-  ],
-  'Consultoría y Servicios': [
-    { heading: 'Playfair Display', body: 'Inter', style: 'Profesional Cálido' },
-    { heading: 'EB Garamond', body: 'Source Sans 3', style: 'Experto' },
-    { heading: 'Libre Baskerville', body: 'Open Sans', style: 'Confiable' },
-  ],
-  'E-commerce / Retail': [
-    { heading: 'Nunito', body: 'Inter', style: 'Amigable Moderno' },
-    { heading: 'Poppins', body: 'Lato', style: 'Vibrante' },
-    { heading: 'Montserrat', body: 'Open Sans', style: 'Universal' },
-  ],
-  'Finanzas': [
-    { heading: 'Merriweather', body: 'Lato', style: 'Sólido Confiable' },
-    { heading: 'Playfair Display', body: 'Source Sans 3', style: 'Premium' },
-    { heading: 'EB Garamond', body: 'Inter', style: 'Institucional' },
-  ],
-  'Arte y Creatividad': [
-    { heading: 'Syne', body: 'DM Sans', style: 'Disruptivo' },
-    { heading: 'Space Grotesk', body: 'Karla', style: 'Vanguardista' },
-    { heading: 'Abril Fatface', body: 'Nunito', style: 'Expresivo' },
-  ],
-  'Deporte y Fitness': [
-    { heading: 'Oswald', body: 'Lato', style: 'Potente' },
-    { heading: 'Barlow Condensed', body: 'Open Sans', style: 'Dinámico' },
-    { heading: 'Bebas Neue', body: 'Inter', style: 'Bold Impact' },
-  ],
-  'Turismo y Hospitalidad': [
-    { heading: 'Cormorant Garamond', body: 'Lato', style: 'Lujo Relajado' },
-    { heading: 'Playfair Display', body: 'Nunito', style: 'Aventura Premium' },
-    { heading: 'Raleway', body: 'Open Sans', style: 'Fresco Moderno' },
-  ],
-  'Inmobiliaria': [
-    { heading: 'Playfair Display', body: 'Lato', style: 'Exclusivo' },
-    { heading: 'EB Garamond', body: 'Inter', style: 'Institucional' },
-    { heading: 'Cormorant', body: 'Source Sans 3', style: 'Premium Moderno' },
-  ],
-  'Otro': [
-    { heading: 'Playfair Display', body: 'Inter', style: 'Clásico + Moderno' },
-    { heading: 'Montserrat', body: 'Open Sans', style: 'Universal' },
-    { heading: 'Lora', body: 'Lato', style: 'Cálido Legible' },
-  ],
+// Pool global de pares curados (para selección aleatoria)
+const FONT_POOL: Array<{ heading: string; body: string; style: string; tags: string[] }> = [
+  { heading: 'Playfair Display', body: 'Inter', style: 'Clásico + Moderno', tags: ['elegante', 'premium', 'clasico'] },
+  { heading: 'Space Grotesk', body: 'DM Sans', style: 'Tech Moderno', tags: ['tech', 'moderno', 'startup'] },
+  { heading: 'Cormorant Garamond', body: 'Nunito', style: 'Elegante Cálido', tags: ['lujoso', 'organico', 'bienestar'] },
+  { heading: 'Syne', body: 'Manrope', style: 'Futurista', tags: ['creativo', 'tech', 'futurista'] },
+  { heading: 'Lora', body: 'Source Sans 3', style: 'Confiable', tags: ['confiable', 'profesional', 'salud'] },
+  { heading: 'Abril Fatface', body: 'Nunito Sans', style: 'Bold', tags: ['bold', 'gastro', 'lifestyle'] },
+  { heading: 'Fraunces', body: 'Figtree', style: 'Artesanal Premium', tags: ['artesanal', 'organico', 'premium'] },
+  { heading: 'Cabinet Grotesk', body: 'Inter', style: 'Limpio', tags: ['tech', 'limpio', 'moderno'] },
+  { heading: 'Italiana', body: 'Raleway', style: 'Editorial Fino', tags: ['elegante', 'moda', 'arte'] },
+  { heading: 'Outfit', body: 'Karla', style: 'Amigable', tags: ['amigable', 'startup', 'educacion'] },
+  { heading: 'DM Serif Display', body: 'DM Sans', style: 'Premium Financiero', tags: ['premium', 'financiero', 'confiable'] },
+  { heading: 'Unbounded', body: 'Space Grotesk', style: 'Futurista Bold', tags: ['futurista', 'tech', 'gaming'] },
+  { heading: 'Libre Baskerville', body: 'Libre Franklin', style: 'Clásico Editorial', tags: ['clasico', 'editorial', 'profesional'] },
+  { heading: 'Clash Display', body: 'General Sans', style: 'Agencia Bold', tags: ['creativo', 'agencia', 'bold'] },
+  { heading: 'Urbanist', body: 'Plus Jakarta Sans', style: 'Moderno Versátil', tags: ['moderno', 'limpio', 'versatil'] },
+  { heading: 'Bodoni Moda', body: 'Jost', style: 'Haute Couture', tags: ['lujo', 'moda', 'editorial'] },
+  { heading: 'Josefin Sans', body: 'Lato', style: 'Minimal Chic', tags: ['geometrico', 'minimal', 'deporte'] },
+  { heading: 'Bitter', body: 'Mulish', style: 'Legible y Cálido', tags: ['legible', 'blog', 'educacion'] },
+  { heading: 'Righteous', body: 'Barlow', style: 'Energético', tags: ['energetico', 'deporte', 'juvenil'] },
+  { heading: 'Cinzel', body: 'EB Garamond', style: 'Lujo Clásico', tags: ['clasico', 'lujo', 'premium'] },
+];
+
+// Pesos por industria (índices del FONT_POOL que tienen preferencia)
+const INDUSTRY_WEIGHTS: Record<string, number[]> = {
+  'Tecnología / Software': [1, 3, 7, 11, 14],
+  'Salud y Bienestar': [2, 4, 6, 17],
+  'Educación': [9, 17, 4, 14],
+  'Gastronomía / Restaurantes': [0, 5, 6, 9],
+  'Moda y Lifestyle': [0, 8, 11, 15, 19],
+  'Consultoría y Servicios': [0, 4, 10, 14, 17],
+  'E-commerce / Retail': [0, 9, 14, 5],
+  'Finanzas': [10, 4, 14, 17, 19],
+  'Arte y Creatividad': [3, 8, 13, 15, 11],
+  'Deporte y Fitness': [16, 18, 14, 9],
+  'Turismo y Hospitalidad': [0, 2, 6, 15, 19],
+  'Inmobiliaria': [0, 10, 17, 15, 19],
+  'Otro': [0, 1, 14, 4, 9],
 };
 
-function getFontPairs(industry: string): FontPair[] {
-  return FONT_PAIRS[industry] || FONT_PAIRS['Otro'];
+function getRandomFontPair(industry: string, currentHeading: string): FontPair {
+  const weights = INDUSTRY_WEIGHTS[industry] || INDUSTRY_WEIGHTS['Otro'];
+
+  let candidates: typeof FONT_POOL;
+  if (Math.random() < 0.7) {
+    // 70%: use industry-weighted pairs
+    candidates = weights.map((i) => FONT_POOL[i]);
+  } else {
+    // 30%: fully random from entire pool
+    candidates = [...FONT_POOL];
+  }
+
+  // Filter out current pair to avoid repetition
+  const filtered = candidates.filter((p) => p.heading !== currentHeading);
+  const pool = filtered.length > 0 ? filtered : candidates;
+
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function getInitialFontPair(industry: string): FontPair {
+  const weights = INDUSTRY_WEIGHTS[industry] || INDUSTRY_WEIGHTS['Otro'];
+  const idx = weights[Math.floor(Math.random() * weights.length)];
+  return FONT_POOL[idx];
 }
 
 function buildGoogleFontsUrl(pairs: FontPair[]): string {
@@ -97,13 +91,10 @@ interface TypographyProps {
 }
 
 export default function Typography({ brandName, industry, onChange }: TypographyProps) {
-  const pairs = getFontPairs(industry);
-  const [pairIndex, setPairIndex] = useState(0);
+  const [currentPair, setCurrentPair] = useState<FontPair>(() => getInitialFontPair(industry));
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
-  const currentPair = pairs[pairIndex];
-
-  // Load Google Fonts dynamically
+  // Load Google Fonts dynamically whenever the pair changes
   useEffect(() => {
     const id = 'marca-google-fonts';
     let el = document.getElementById(id) as HTMLLinkElement | null;
@@ -113,16 +104,16 @@ export default function Typography({ brandName, industry, onChange }: Typography
       el.rel = 'stylesheet';
       document.head.appendChild(el);
     }
-    el.href = buildGoogleFontsUrl(pairs);
+    el.href = buildGoogleFontsUrl([currentPair]);
     el.onload = () => setFontsLoaded(true);
     // If already cached it might not fire onload
     setTimeout(() => setFontsLoaded(true), 800);
-  }, [industry]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [currentPair]);
 
   const handleNext = () => {
-    const next = (pairIndex + 1) % pairs.length;
-    setPairIndex(next);
-    onChange?.(pairs[next]);
+    const next = getRandomFontPair(industry, currentPair.heading);
+    setCurrentPair(next);
+    onChange?.(next);
   };
 
   useEffect(() => {
@@ -184,17 +175,6 @@ export default function Typography({ brandName, industry, onChange }: Typography
           </svg>
           Regenerar tipografía
         </button>
-        <div className="typography-preview__dots">
-          {pairs.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              className={`color-palette__preset-dot ${pairIndex === i ? 'color-palette__preset-dot--active' : ''}`}
-              onClick={() => { setPairIndex(i); onChange?.(pairs[i]); }}
-              aria-label={`Par tipográfico ${i + 1}`}
-            />
-          ))}
-        </div>
       </div>
     </div>
   );

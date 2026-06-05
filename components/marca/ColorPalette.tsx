@@ -29,10 +29,45 @@ function getContrastColor(hex: string): string {
   return luminance > 0.5 ? '#18263A' : '#FFFFFF';
 }
 
+// Generates a full harmonious 5-color palette (coolors.co style)
+function generateHarmoniousPalette(): string[] {
+  const schemes = ['analogous', 'complementary', 'triadic', 'split-complementary', 'monochromatic'];
+  const scheme = schemes[Math.floor(Math.random() * schemes.length)];
+  const baseHue = Math.floor(Math.random() * 360);
+  const baseSat = 40 + Math.floor(Math.random() * 40); // 40-80%
+
+  let hues: number[];
+  switch (scheme) {
+    case 'analogous':
+      hues = [baseHue, baseHue + 30, baseHue + 60, baseHue + 90, baseHue + 15];
+      break;
+    case 'complementary':
+      hues = [baseHue, baseHue + 30, baseHue + 180, baseHue + 210, baseHue + 150];
+      break;
+    case 'triadic':
+      hues = [baseHue, baseHue + 120, baseHue + 240, baseHue + 60, baseHue + 180];
+      break;
+    case 'split-complementary':
+      hues = [baseHue, baseHue + 150, baseHue + 210, baseHue + 30, baseHue + 330];
+      break;
+    case 'monochromatic':
+    default:
+      hues = [baseHue, baseHue, baseHue, baseHue, baseHue];
+      break;
+  }
+
+  // Varying lightnesses for visual contrast across the palette
+  const lightnesses = [20, 35, 55, 70, 85];
+  // Shuffle lightnesses for variety
+  const shuffled = [...lightnesses].sort(() => Math.random() - 0.5);
+
+  return hues.map((h, i) => hslToHex(h % 360, baseSat, shuffled[i]));
+}
+
 function generateHarmoniousColor(): string {
   const h = Math.floor(Math.random() * 360);
-  const s = 30 + Math.floor(Math.random() * 50);
-  const l = 20 + Math.floor(Math.random() * 60);
+  const s = 40 + Math.floor(Math.random() * 40);
+  const l = 20 + Math.floor(Math.random() * 65);
   return hslToHex(h, s, l);
 }
 
@@ -136,21 +171,11 @@ export default function ColorPalette({ industry, initialPalette, onChange }: Col
   const availablePalettes = INDUSTRY_PALETTES[industry] || [];
 
   const regenerate = useCallback(() => {
-    const palettes = INDUSTRY_PALETTES[industry];
-    const nextIndex = palettes && palettes.length > 0
-      ? (paletteIndex + 1) % palettes.length
-      : paletteIndex;
-    setPaletteIndex(nextIndex);
+    const newPalette = generateHarmoniousPalette();
     setColors((prev) =>
-      prev.map((color, i) => {
-        if (locked[i]) return color;
-        if (palettes && palettes.length > 0) {
-          return palettes[nextIndex][i] ?? generateHarmoniousColor();
-        }
-        return generateHarmoniousColor();
-      })
+      prev.map((color, i) => (locked[i] ? color : newPalette[i]))
     );
-  }, [locked, industry, paletteIndex]);
+  }, [locked]);
 
   // Spacebar regeneration
   useEffect(() => {
