@@ -1,20 +1,6 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-
 export default function Navbar() {
-  const [solid, setSolid] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setSolid(window.scrollY > 80);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
-    <nav className={`navbar${solid ? ' navbar--solid' : ''}`}>
+    <nav className="navbar">
       <a className="nav-brand" href="#">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -77,10 +63,6 @@ export default function Navbar() {
           </svg>
         </a>
       </div>
-
-      <a className="nav-cta" href="#brief">
-        Trabajemos Juntos
-      </a>
     </nav>
   );
 }

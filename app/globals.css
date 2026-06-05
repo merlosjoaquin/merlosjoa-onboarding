@@ -50,8 +50,6 @@ body {
 .nav-links { display: flex; align-items: center; gap: 36px; }
 .nav-links a { font-size: 13px; font-weight: 500; color: var(--mid); text-decoration: none; letter-spacing: .04em; transition: color .15s; }
 .nav-links a:hover { color: var(--text); }
-.nav-cta { background: var(--grad); color: #fff; padding: 9px 22px; border-radius: 2px; font-size: 11px; font-weight: 700; text-decoration: none; letter-spacing: .1em; text-transform: uppercase; transition: opacity .15s; }
-.nav-cta:hover { opacity: .85; }
 .nav-left { display: flex; align-items: center; gap: 20px; }
 .nav-social { display: flex; align-items: center; gap: 14px; }
 .nav-social a { display: flex; align-items: center; color: var(--mid); opacity: .7; transition: opacity .2s, color .2s; }
@@ -264,19 +262,12 @@ body {
 .hero-btns { justify-content: center; }
 .hero-divider { justify-content: center; }
 
-/* NAVBAR scroll states */
-.navbar--solid {
-  background: rgba(253,250,245,.95) !important;
-  backdrop-filter: blur(20px) !important; -webkit-backdrop-filter: blur(20px) !important;
-  border-bottom-color: var(--border) !important;
-}
-.navbar:not(.navbar--solid) .nav-name { color: #fff; }
-.navbar:not(.navbar--solid) .nav-handle { color: rgba(255,255,255,.55); }
-.navbar:not(.navbar--solid) .nav-links a { color: rgba(255,255,255,.7); }
-.navbar:not(.navbar--solid) .nav-links a:hover { color: #fff; }
-.navbar:not(.navbar--solid) .nav-social a { color: rgba(255,255,255,.65); opacity: 1; }
-.navbar:not(.navbar--solid) .nav-cta { background: rgba(255,255,255,.18); backdrop-filter: blur(8px); }
-.navbar:not(.navbar--solid) .nav-cta:hover { background: rgba(255,255,255,.28); }
+/* NAVBAR always transparent — text/icon overrides for dark hero background */
+.nav-name { color: #fff; }
+.nav-handle { color: rgba(255,255,255,.55); }
+.nav-links a { color: rgba(255,255,255,.7); }
+.nav-links a:hover { color: #fff; }
+.nav-social a { color: rgba(255,255,255,.65); opacity: 1; }
 
 /* RECURSOS dark background overrides */
 #recursos .section-eyebrow { color: #E89820; background: none; -webkit-background-clip: initial; background-clip: initial; }
