@@ -20,7 +20,7 @@ export default function Hero() {
             <div className="hero-btns">
               <a className="btn-primary" href="#brief">Trabajemos Juntos</a>
               <a className="btn-ghost" href="#recursos">Recursos Gratis</a>
-              <a className="btn-ghost" href="/marca">Crea tu marca gratis</a>
+              <a className="btn-primary" href="/marca">Crea tu marca gratis</a>
             </div>
           </div>
         </div>
