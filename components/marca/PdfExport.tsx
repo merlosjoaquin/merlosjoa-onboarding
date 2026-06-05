@@ -9,6 +9,7 @@ interface PdfExportProps {
     fonts: { heading: string; body: string };
     texts: Record<string, string>;
   };
+  onReset: () => void;
 }
 
 const SECTION_LABELS: Record<string, string> = {
@@ -30,7 +31,7 @@ function getContrastColor(hex: string): string {
   return luminance > 0.5 ? '#18263A' : '#FFFFFF';
 }
 
-export default function PdfExport({ brandData }: PdfExportProps) {
+export default function PdfExport({ brandData, onReset }: PdfExportProps) {
   const [loading, setLoading] = useState(false);
 
   const handleExport = async () => {
@@ -157,24 +158,35 @@ export default function PdfExport({ brandData }: PdfExportProps) {
   };
 
   return (
-    <button
-      className="btn-primary pdf-export-btn"
-      onClick={handleExport}
-      disabled={loading}
-    >
-      {loading ? (
-        <>
-          <span className="brand-text__spinner" style={{ marginRight: 8 }} />
-          Generando PDF...
-        </>
-      ) : (
-        <>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ marginRight: 8 }}>
-            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-          </svg>
-          Exportar Manual de Marca (PDF)
-        </>
-      )}
-    </button>
+    <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
+      <button
+        className="btn-primary pdf-export-btn"
+        onClick={handleExport}
+        disabled={loading}
+        type="button"
+      >
+        {loading ? (
+          <>
+            <span className="brand-text__spinner" style={{ marginRight: 8 }} />
+            Generando PDF...
+          </>
+        ) : (
+          <>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ marginRight: 8 }}>
+              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+            </svg>
+            ↓ EXPORTAR MANUAL DE MARCA (PDF)
+          </>
+        )}
+      </button>
+      <button
+        onClick={onReset}
+        className="btn-ghost"
+        type="button"
+        style={{ borderColor: 'rgba(255,255,255,0.3)', color: 'white' }}
+      >
+        ← GENERAR OTRA MARCA
+      </button>
+    </div>
   );
 }

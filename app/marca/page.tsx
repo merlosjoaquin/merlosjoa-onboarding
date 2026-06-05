@@ -159,16 +159,10 @@ export default function MarcaPage() {
                   fonts,
                   texts,
                 }}
+                onReset={handleReset}
               />
             </div>
           </section>
-
-          {/* Reset */}
-          <div className="marca-wrap marca-reset">
-            <button className="btn-primary marca-reset__btn" onClick={handleReset}>
-              Generar otra marca
-            </button>
-          </div>
 
           {/* CTA */}
           <OnboardingCTA />

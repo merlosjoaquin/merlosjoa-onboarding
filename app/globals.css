@@ -695,10 +695,6 @@ body {
   font-family: var(--sans); cursor: pointer;
 }
 
-/* ── Reset button row ────────────────────────────────────── */
-.marca-reset { padding: 32px 32px 0; display: flex; justify-content: center; }
-.marca-reset__btn { cursor: pointer; border: none; font-family: var(--sans); }
-
 @media (max-width: 768px) {
   .marca-hero { padding: 72px 24px 56px; }
   .marca-wrap { padding: 0 20px; }
