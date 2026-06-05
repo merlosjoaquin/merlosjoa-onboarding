@@ -1,32 +1,34 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState } from 'react';
 
 export default function Brief() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget;
     setSubmitting(true);
 
     try {
-      const res = await fetch('/', {
+      const formData = new FormData(e.currentTarget);
+      const body = new URLSearchParams(formData as unknown as Record<string, string>).toString();
+
+      const res = await fetch('/api/submit-brief', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString(),
+        body,
       });
 
       if (res.ok) {
         setSuccess(true);
       } else {
-        setSubmitting(false);
-        alert('Hubo un error al enviar. Intentá de nuevo.');
+        alert('Hubo un error al enviar el brief. Por favor intentá de nuevo.');
       }
     } catch {
+      alert('Hubo un error al enviar el brief. Por favor intentá de nuevo.');
+    } finally {
       setSubmitting(false);
-      alert('Hubo un error al enviar. Intentá de nuevo.');
     }
   };
 
@@ -35,11 +37,8 @@ export default function Brief() {
       <div className="section-wrap">
         <form
           id="brief-form"
-          name="brief"
-          data-netlify="true"
           onSubmit={handleSubmit}
         >
-          <input type="hidden" name="form-name" value="brief" />
 
           <div className="brief-header">
             <div>
