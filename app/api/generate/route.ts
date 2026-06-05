@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     const userPrompt = `Marca: "${brandName}"\nIndustria: ${industry}\nDescripción: ${description || 'No proporcionada'}`;
 
     const completion = await groq.chat.completions.create({
-      model: 'llama-3.1-70b-versatile',
+      model: 'llama-3.3-70b-versatile',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
