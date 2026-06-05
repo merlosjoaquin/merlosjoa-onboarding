@@ -316,20 +316,6 @@ export default function ColorPalette({ industry, initialPalette, onChange }: Col
         </button>
         <span className="color-palette__hint">o presioná Espacio</span>
 
-        {availablePalettes.length > 1 && (
-          <div className="color-palette__presets">
-            {availablePalettes.map((_, idx) => (
-              <button
-                key={idx}
-                type="button"
-                className={`color-palette__preset-dot ${paletteIndex === idx ? 'color-palette__preset-dot--active' : ''}`}
-                onClick={() => switchPalette(idx)}
-                title={`Paleta ${idx + 1}`}
-                aria-label={`Seleccionar paleta ${idx + 1}`}
-              />
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

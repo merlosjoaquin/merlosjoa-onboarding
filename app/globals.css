@@ -502,14 +502,6 @@ body {
 }
 .color-palette__controls { display: flex; align-items: center; gap: 16px; }
 .color-palette__hint { font-size: 12px; color: var(--dim); }
-.color-palette__presets { display: flex; gap: 8px; margin-left: auto; }
-.color-palette__preset-dot {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: var(--border2); border: none; cursor: pointer;
-  transition: background .15s, transform .15s;
-}
-.color-palette__preset-dot:hover { background: var(--mid); transform: scale(1.2); }
-.color-palette__preset-dot--active { background: var(--pur); transform: scale(1.2); }
 
 @media (max-width: 600px) {
   .color-palette__swatches { height: 140px; gap: 4px; }
@@ -704,7 +696,8 @@ body {
 }
 
 /* ── Reset button row ────────────────────────────────────── */
-.marca-reset { padding: 32px 32px 0; }
+.marca-reset { padding: 32px 32px 0; display: flex; justify-content: center; }
+.marca-reset__btn { cursor: pointer; border: none; font-family: var(--sans); }
 
 @media (max-width: 768px) {
   .marca-hero { padding: 72px 24px 56px; }

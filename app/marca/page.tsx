@@ -165,8 +165,8 @@ export default function MarcaPage() {
 
           {/* Reset */}
           <div className="marca-wrap marca-reset">
-            <button className="btn-ghost" onClick={handleReset}>
-              ← Generar otra marca
+            <button className="btn-primary marca-reset__btn" onClick={handleReset}>
+              Generar otra marca
             </button>
           </div>
 
