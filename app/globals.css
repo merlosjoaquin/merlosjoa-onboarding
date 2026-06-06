@@ -39,7 +39,7 @@ body {
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 64px; height: 68px;
   background: rgba(0,0,0,.18);
-  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255,255,255,.08);
   transition: none;
 }
