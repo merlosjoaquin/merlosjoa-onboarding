@@ -35,14 +35,22 @@ body {
 
 /* NAVBAR */
 .navbar {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 64px; height: 68px;
-  background: rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  isolation: isolate;
+  background: transparent;
+  overflow: visible;
   border-bottom: 1px solid rgba(255,255,255,.08);
   transition: none;
+}
+.navbar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(0, 0, 0, 0.20);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
 .nav-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; object-position: center top; border: 1.5px solid rgba(232,146,30,.5); }
