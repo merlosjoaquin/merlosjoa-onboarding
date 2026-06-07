@@ -26,7 +26,7 @@ body {
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
-  min-height: 100dvh;
+  min-height: var(--app-height, 100svh);
   max-width: 100%;
   position: relative;
   overscroll-behavior: none;
@@ -71,7 +71,7 @@ body {
 
 /* HERO */
 .hero {
-  min-height: 100svh;
+  min-height: var(--app-height, 100svh);
   padding-top: 68px;
   display: flex; align-items: flex-start; justify-content: center;
   position: relative; overflow: hidden;
@@ -203,7 +203,7 @@ body {
   .nav-handle { display: none; }
   .nav-social { gap: 10px; }
   .nav-social svg { width: 17px; height: 17px; }
-  .hero { min-height: 100svh; padding-top: 60px; }
+  .hero { min-height: var(--app-height, 100svh); padding-top: 60px; }
   .hero-inner { padding: 0 24px; }
   .hero-text { padding: 40px 0 56px; }
   .hero-title { font-size: clamp(56px, 14vw, 86px); margin-bottom: 32px; }
@@ -366,7 +366,7 @@ body {
 .btn-secondary:disabled { opacity: .5; cursor: not-allowed; }
 
 /* Page layout */
-.marca-page { min-height: 100vh; }
+.marca-page { min-height: var(--app-height, 100svh); }
 .marca-wrap { max-width: 860px; margin: 0 auto; padding: 0 32px; }
 
 /* Hero */

@@ -34,6 +34,7 @@ export default function RootLayout({
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){function h(){document.documentElement.style.setProperty('--app-height',window.innerHeight+'px')}h();window.addEventListener('orientationchange',function(){setTimeout(h,120)})})()` }} />
       </head>
       <body>{children}</body>
     </html>
