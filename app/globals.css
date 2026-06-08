@@ -40,7 +40,7 @@ body {
   padding: 0 64px; height: 68px;
   background: transparent;
   overflow: visible;
-  border-bottom: 1px solid rgba(255,255,255,.08);
+  border-bottom: none;
   transition: none;
 }
 .navbar::before {
@@ -89,7 +89,7 @@ body {
 .hero-visual { display: none; }
 
 /* Hero dark-theme text overrides */
-.hero .hero-eyebrow { color: rgba(255,255,255,.4); border-bottom-color: rgba(255,255,255,.1); }
+.hero .hero-eyebrow { color: rgba(255,255,255,.4); border-bottom-color: transparent; }
 .hero .hero-title { color: #f0f0f0; }
 .hero .hero-divider span { color: rgba(255,255,255,.32); }
 .hero .btn-ghost { border-color: rgba(255,255,255,.2); color: rgba(255,255,255,.65); }
