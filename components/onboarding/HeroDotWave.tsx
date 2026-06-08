@@ -8,8 +8,9 @@ export default function HeroDotWave() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const c = canvas;
-    const ctx = c.getContext('2d');
-    if (!ctx) return;
+    const ctx2d = c.getContext('2d');
+    if (!ctx2d) return;
+    const ctx = ctx2d;
 
     const SPACING = 28;
     const RADIUS = 1.5;
