@@ -79,8 +79,6 @@ body {
   display: flex; align-items: flex-start; justify-content: center;
   position: relative; overflow: hidden;
   background-color: #05080F;
-  background-image: radial-gradient(rgba(232,146,30,.14) 1px, transparent 1px);
-  background-size: 28px 28px;
 }
 .hero-inner {
   max-width: 1440px; width: 100%; margin: 0 auto; padding: 0 80px;

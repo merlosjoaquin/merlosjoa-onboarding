@@ -1,8 +1,11 @@
+import HeroDotWave from './HeroDotWave';
+
 export default function Hero() {
   return (
     <section
       className="hero"
     >
+      <HeroDotWave />
       <div className="hero-inner">
         <div className="hero-text">
           <div className="hero-eyebrow">
