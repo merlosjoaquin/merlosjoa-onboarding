@@ -17,7 +17,7 @@ export default function HeroDotWave() {
     const BASE = 0.10;   // minimum dot alpha
     const AMP  = 0.75;   // wave amplitude (peak alpha = BASE + AMP)
     const FREQ = 0.006;  // spatial frequency — ~1 full wave per 1050px of height
-    const SPEED = 0.018; // time step per frame — full cycle ≈ 5.8s at 60fps
+    const SPEED = 0.027; // time step per frame — full cycle ≈ 3.9s at 60fps
 
     let raf: number;
     let t = 0;
