@@ -223,6 +223,17 @@ export default function Resources() {
           </svg>
         </button>
       </div>
+
+      <div className="shelf-dots">
+        {resources.map((_, i) => (
+          <button
+            key={i}
+            className={`shelf-dot${i === current ? ' shelf-dot--active' : ''}`}
+            onClick={() => goTo(i)}
+            aria-label={`Recurso ${i + 1}`}
+          />
+        ))}
+      </div>
     </section>
   );
 }
