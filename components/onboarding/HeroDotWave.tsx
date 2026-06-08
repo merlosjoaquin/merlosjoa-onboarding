@@ -32,11 +32,13 @@ export default function HeroDotWave() {
       const h = c.height;
       ctx.clearRect(0, 0, w, h);
 
-      for (let y = 0; y <= h + SPACING; y += SPACING) {
+      const ox = (w % SPACING) / 2;
+      const oy = (h % SPACING) / 2;
+      for (let y = oy; y <= h; y += SPACING) {
         const alpha = BASE + AMP * ((Math.sin(y * FREQ - t) + 1) / 2);
         ctx.beginPath();
         ctx.fillStyle = `rgba(232,146,30,${alpha.toFixed(3)})`;
-        for (let x = 0; x <= w + SPACING; x += SPACING) {
+        for (let x = ox; x <= w; x += SPACING) {
           ctx.moveTo(x + RADIUS, y);
           ctx.arc(x, y, RADIUS, 0, Math.PI * 2);
         }
