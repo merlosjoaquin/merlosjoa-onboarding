@@ -2,7 +2,6 @@ export default function Hero() {
   return (
     <section
       className="hero"
-      style={{ backgroundImage: "url('/images/hero.jpg')" }}
     >
       <div className="hero-inner">
         <div className="hero-text">

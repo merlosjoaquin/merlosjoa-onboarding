@@ -68,6 +68,9 @@ body {
 .nav-social a.soc-tt:hover { color: #010101; }
 .nav-social a.soc-li:hover { color: #0A66C2; }
 .nav-social a.soc-yt:hover { color: #FF0000; }
+.navbar--dark .nav-name { color: rgba(255,255,255,.9); }
+.navbar--dark .nav-handle { color: rgba(255,255,255,.45); }
+.navbar--dark .nav-social a { color: rgba(255,255,255,.55); opacity: 1; }
 
 /* HERO */
 .hero {
@@ -75,7 +78,9 @@ body {
   padding-top: 68px;
   display: flex; align-items: flex-start; justify-content: center;
   position: relative; overflow: hidden;
-  background-size: cover; background-position: center 40%;
+  background-color: #05080F;
+  background-image: radial-gradient(rgba(232,146,30,.14) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 .hero-inner {
   max-width: 1440px; width: 100%; margin: 0 auto; padding: 0 80px;
@@ -84,6 +89,13 @@ body {
 }
 .hero-text { padding: 72px 0 88px; position: relative; z-index: 2; }
 .hero-visual { display: none; }
+
+/* Hero dark-theme text overrides */
+.hero .hero-eyebrow { color: rgba(255,255,255,.4); border-bottom-color: rgba(255,255,255,.1); }
+.hero .hero-title { color: #f0f0f0; }
+.hero .hero-divider span { color: rgba(255,255,255,.32); }
+.hero .btn-ghost { border-color: rgba(255,255,255,.2); color: rgba(255,255,255,.65); }
+.hero .btn-ghost:hover { border-color: rgba(232,146,30,.7); color: #fff; }
 
 /* Masthead bar */
 .hero-eyebrow {

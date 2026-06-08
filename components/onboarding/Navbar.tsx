@@ -1,6 +1,22 @@
+'use client';
+import { useEffect, useState } from 'react';
+
 export default function Navbar() {
+  const [onDark, setOnDark] = useState(true);
+
+  useEffect(() => {
+    const hero = document.querySelector('.hero');
+    if (!hero) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setOnDark(entry.isIntersecting),
+      { threshold: 0.05 }
+    );
+    obs.observe(hero);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <nav className="navbar">
+    <nav className={`navbar${onDark ? ' navbar--dark' : ''}`}>
       <a className="nav-brand" href="#">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
