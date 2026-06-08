@@ -110,14 +110,6 @@ export default function Resources() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Auto-advance every 5 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrent(prev => ((prev + 1) % N));
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
   // Touch handlers
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
