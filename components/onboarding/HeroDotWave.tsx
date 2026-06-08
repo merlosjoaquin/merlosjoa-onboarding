@@ -7,7 +7,8 @@ export default function HeroDotWave() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const c = canvas;
+    const ctx = c.getContext('2d');
     if (!ctx) return;
 
     const SPACING = 28;
@@ -21,13 +22,13 @@ export default function HeroDotWave() {
     let t = 0;
 
     function resize() {
-      canvas.width  = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
+      c.width  = c.offsetWidth;
+      c.height = c.offsetHeight;
     }
 
     function draw() {
-      const w = canvas.width;
-      const h = canvas.height;
+      const w = c.width;
+      const h = c.height;
       ctx.clearRect(0, 0, w, h);
 
       for (let y = 0; y <= h + SPACING; y += SPACING) {
