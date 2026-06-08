@@ -213,9 +213,6 @@ export default function Resources() {
           })}
         </div>
 
-        <div className="shelf-fade-l"></div>
-        <div className="shelf-fade-r"></div>
-
         <button
           className="shelf-nav shelf-nav--next"
           onClick={() => goTo(current + 1)}
