@@ -390,7 +390,7 @@ body {
   padding: 88px 32px 72px;
   text-align: center;
   position: relative;
-  overflow: hidden;
+  overflow: clip;
 }
 .marca-hero::before {
   content: '';
@@ -408,7 +408,7 @@ body {
 .marca-hero__title {
   font-family: var(--serif); font-weight: 900;
   font-size: clamp(36px, 5vw, 60px);
-  line-height: .95; letter-spacing: -.03em;
+  line-height: 1.1; letter-spacing: -.03em;
   color: #fff; margin-bottom: 20px;
 }
 .marca-hero__title em {
