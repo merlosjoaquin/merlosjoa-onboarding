@@ -165,7 +165,7 @@ function buildCoverPage(name: string, industry: string, colors: string[], accent
         ${toc}
       </div>
       <div style="position:absolute;bottom:40px;left:64px;right:64px;display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #F1F5F9;">
-        <span style="font-size:11px;color:#94A3B8;">Generado en porefox.com/marca</span>
+        <span style="font-size:11px;color:#94A3B8;">Generado en porefox.com.ar | @merlosjoa</span>
         <span style="font-size:11px;color:#94A3B8;">${new Date().toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
       </div>
     </div>`;
