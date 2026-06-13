@@ -184,7 +184,7 @@ body {
 .hint { display: block; font-size: 12px; color: #fff !important; margin-bottom: 8px; font-style: italic; }
 .field input[type="text"], .field input[type="email"], .field input[type="date"], .field textarea { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 3px; color: var(--text); font-family: var(--sans); font-size: 14px; padding: 12px 16px; transition: border-color .18s, background .18s; resize: vertical; outline: none; color-scheme: light dark; }
 .field input:focus, .field textarea:focus { border-color: rgba(232,146,30,.5); background: var(--surface2); }
-.field input::placeholder, .field textarea::placeholder { color: #fff !important; font-style: italic; }
+.field input::placeholder, .field textarea::placeholder { color: rgba(255,255,255,.7) !important; font-style: italic; }
 .field textarea { min-height: 88px; }
 .field textarea.tall { min-height: 116px; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
