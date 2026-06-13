@@ -89,9 +89,9 @@ body {
 .hero-visual { display: none; }
 
 /* Hero dark-theme text overrides */
-.hero .hero-eyebrow { color: rgba(255,255,255,.4); border-bottom-color: transparent; }
+.hero .hero-eyebrow { color: #fff; border-bottom-color: transparent; }
 .hero .hero-title { color: #f0f0f0; }
-.hero .hero-divider span { color: rgba(255,255,255,.32); }
+.hero .hero-divider span { color: #fff; }
 .hero .btn-ghost { border-color: rgba(255,255,255,.2); color: rgba(255,255,255,.65); }
 .hero .btn-ghost:hover { border-color: rgba(232,146,30,.7); color: #fff; }
 
@@ -295,7 +295,7 @@ body {
 #recursos .section-eyebrow { color: #E89820; background: none; -webkit-background-clip: initial; background-clip: initial; }
 #recursos .section-title { color: #fff; }
 #recursos .section-title em { color: #E89820; background: none; -webkit-background-clip: initial; background-clip: initial; }
-#recursos .recursos-header-text p { color: rgba(255,255,255,.60); }
+#recursos .recursos-header-text p { color: #fff; }
 #recursos .shelf-fade-r { background: linear-gradient(to right, transparent, rgba(5,8,15,.85) 88%); }
 #recursos .shelf-fade-l { background: linear-gradient(to left, transparent, rgba(5,8,15,.85) 88%); }
 
