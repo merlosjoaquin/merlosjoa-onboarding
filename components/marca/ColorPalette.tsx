@@ -3,18 +3,46 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
 
+function hexToHsl(hex: string): [number, number, number] {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  if (max === min) return [0, 0, Math.round(l * 100)];
+  const d = max - min;
+  const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+  let h = 0;
+  switch (max) {
+    case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+    case g: h = ((b - r) / d + 2) / 6; break;
+    case b: h = ((r - g) / d + 4) / 6; break;
+  }
+  return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
+}
+
 function hslToHex(h: number, s: number, l: number): string {
-  s /= 100;
-  l /= 100;
+  s /= 100; l /= 100;
   const a = s * Math.min(l, 1 - l);
   const f = (n: number) => {
     const k = (n + h / 30) % 12;
     const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-    return Math.round(255 * color)
-      .toString(16)
-      .padStart(2, '0');
+    return Math.round(255 * color).toString(16).padStart(2, '0');
   };
   return `#${f(0)}${f(8)}${f(4)}`.toUpperCase();
+}
+
+export function generateColorScale(hex: string): string[] {
+  const [h, s] = hexToHsl(hex);
+  return [
+    hslToHex(h, Math.min(s + 8, 100), 18),
+    hslToHex(h, Math.min(s + 5, 100), 30),
+    hslToHex(h, Math.min(s + 2, 100), 42),
+    hex.toUpperCase(),
+    hslToHex(h, Math.max(s - 8, 15), 62),
+    hslToHex(h, Math.max(s - 14, 12), 74),
+    hslToHex(h, Math.max(s - 20, 8), 84),
+  ];
 }
 
 function isValidHex(hex: string): boolean {
@@ -25,50 +53,7 @@ function getContrastColor(hex: string): string {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
-  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  return luminance > 0.5 ? '#18263A' : '#FFFFFF';
-}
-
-// Generates a full harmonious 5-color palette (coolors.co style)
-function generateHarmoniousPalette(): string[] {
-  const schemes = ['analogous', 'complementary', 'triadic', 'split-complementary', 'monochromatic'];
-  const scheme = schemes[Math.floor(Math.random() * schemes.length)];
-  const baseHue = Math.floor(Math.random() * 360);
-  const baseSat = 40 + Math.floor(Math.random() * 40); // 40-80%
-
-  let hues: number[];
-  switch (scheme) {
-    case 'analogous':
-      hues = [baseHue, baseHue + 30, baseHue + 60, baseHue + 90, baseHue + 15];
-      break;
-    case 'complementary':
-      hues = [baseHue, baseHue + 30, baseHue + 180, baseHue + 210, baseHue + 150];
-      break;
-    case 'triadic':
-      hues = [baseHue, baseHue + 120, baseHue + 240, baseHue + 60, baseHue + 180];
-      break;
-    case 'split-complementary':
-      hues = [baseHue, baseHue + 150, baseHue + 210, baseHue + 30, baseHue + 330];
-      break;
-    case 'monochromatic':
-    default:
-      hues = [baseHue, baseHue, baseHue, baseHue, baseHue];
-      break;
-  }
-
-  // Varying lightnesses for visual contrast across the palette
-  const lightnesses = [20, 35, 55, 70, 85];
-  // Shuffle lightnesses for variety
-  const shuffled = [...lightnesses].sort(() => Math.random() - 0.5);
-
-  return hues.map((h, i) => hslToHex(h % 360, baseSat, shuffled[i]));
-}
-
-function generateHarmoniousColor(): string {
-  const h = Math.floor(Math.random() * 360);
-  const s = 40 + Math.floor(Math.random() * 40);
-  const l = 20 + Math.floor(Math.random() * 65);
-  return hslToHex(h, s, l);
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.5 ? '#18263A' : '#FFFFFF';
 }
 
 // ─── Industry palettes ────────────────────────────────────────────────────────
@@ -141,10 +126,31 @@ const INDUSTRY_PALETTES: Record<string, string[][]> = {
   ],
 };
 
+export const DEFAULT_COLOR_ROLES = ['Primario 1', 'Primario 2', 'Acento', 'Fondo', 'Tipografía'];
+
+function generateHarmoniousPalette(): string[] {
+  const schemes = ['analogous', 'complementary', 'triadic', 'split-complementary', 'monochromatic'];
+  const scheme = schemes[Math.floor(Math.random() * schemes.length)];
+  const baseHue = Math.floor(Math.random() * 360);
+  const baseSat = 40 + Math.floor(Math.random() * 40);
+  let hues: number[];
+  switch (scheme) {
+    case 'analogous': hues = [baseHue, baseHue + 30, baseHue + 60, baseHue + 90, baseHue + 15]; break;
+    case 'complementary': hues = [baseHue, baseHue + 30, baseHue + 180, baseHue + 210, baseHue + 150]; break;
+    case 'triadic': hues = [baseHue, baseHue + 120, baseHue + 240, baseHue + 60, baseHue + 180]; break;
+    case 'split-complementary': hues = [baseHue, baseHue + 150, baseHue + 210, baseHue + 30, baseHue + 330]; break;
+    default: hues = [baseHue, baseHue, baseHue, baseHue, baseHue]; break;
+  }
+  const lightnesses = [20, 35, 55, 70, 85].sort(() => Math.random() - 0.5);
+  return hues.map((h, i) => hslToHex(h % 360, baseSat, lightnesses[i]));
+}
+
 function getInitialPalette(industry: string): string[] {
   const palettes = INDUSTRY_PALETTES[industry];
-  if (palettes && palettes.length > 0) return [...palettes[0]];
-  return Array.from({ length: 5 }, generateHarmoniousColor);
+  if (palettes?.length) return [...palettes[0]];
+  const h = Math.floor(Math.random() * 360);
+  const s = 40 + Math.floor(Math.random() * 40);
+  return [20, 32, 48, 66, 82].map(l => hslToHex(h, s, l));
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -153,31 +159,31 @@ interface ColorPaletteProps {
   industry: string;
   initialPalette?: string[];
   onChange?: (colors: string[]) => void;
+  onRolesChange?: (roles: string[]) => void;
 }
 
-export default function ColorPalette({ industry, initialPalette, onChange }: ColorPaletteProps) {
+export default function ColorPalette({ industry, initialPalette, onChange, onRolesChange }: ColorPaletteProps) {
   const [colors, setColors] = useState<string[]>(() =>
-    initialPalette && initialPalette.length === 5
-      ? initialPalette
-      : getInitialPalette(industry)
+    initialPalette?.length === 5 ? initialPalette : getInitialPalette(industry)
   );
   const [locked, setLocked] = useState<boolean[]>([false, false, false, false, false]);
+  const [colorRoles, setColorRoles] = useState<string[]>([...DEFAULT_COLOR_ROLES]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState('');
+  const [editingRoleIndex, setEditingRoleIndex] = useState<number | null>(null);
+  const [editingRoleValue, setEditingRoleValue] = useState('');
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [paletteIndex, setPaletteIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const roleInputRef = useRef<HTMLInputElement>(null);
 
   const availablePalettes = INDUSTRY_PALETTES[industry] || [];
 
   const regenerate = useCallback(() => {
     const newPalette = generateHarmoniousPalette();
-    setColors((prev) =>
-      prev.map((color, i) => (locked[i] ? color : newPalette[i]))
-    );
+    setColors(prev => prev.map((color, i) => locked[i] ? color : newPalette[i]));
   }, [locked]);
 
-  // Spacebar regeneration
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement).tagName;
@@ -190,36 +196,34 @@ export default function ColorPalette({ industry, initialPalette, onChange }: Col
     return () => window.removeEventListener('keydown', handleKey);
   }, [regenerate]);
 
-  // Notify parent
-  useEffect(() => {
-    onChange?.(colors);
-  }, [colors, onChange]);
+  useEffect(() => { onChange?.(colors); }, [colors, onChange]);
+  useEffect(() => { onRolesChange?.(colorRoles); }, [colorRoles, onRolesChange]);
 
-  const toggleLock = (i: number) => {
-    setLocked((prev) => {
-      const next = [...prev];
-      next[i] = !next[i];
-      return next;
-    });
-  };
+  const toggleLock = (i: number) =>
+    setLocked(prev => { const n = [...prev]; n[i] = !n[i]; return n; });
 
   const startEdit = (i: number) => {
     setEditingIndex(i);
     setEditValue(colors[i]);
     setTimeout(() => inputRef.current?.focus(), 0);
   };
-
   const commitEdit = () => {
     if (editingIndex === null) return;
     const val = editValue.startsWith('#') ? editValue : `#${editValue}`;
-    if (isValidHex(val)) {
-      setColors((prev) => {
-        const next = [...prev];
-        next[editingIndex] = val.toUpperCase();
-        return next;
-      });
-    }
+    if (isValidHex(val)) setColors(prev => { const n = [...prev]; n[editingIndex] = val.toUpperCase(); return n; });
     setEditingIndex(null);
+  };
+
+  const startRoleEdit = (i: number) => {
+    setEditingRoleIndex(i);
+    setEditingRoleValue(colorRoles[i]);
+    setTimeout(() => roleInputRef.current?.focus(), 0);
+  };
+  const commitRoleEdit = () => {
+    if (editingRoleIndex === null) return;
+    const trimmed = editingRoleValue.trim();
+    if (trimmed) setColorRoles(prev => { const n = [...prev]; n[editingRoleIndex] = trimmed; return n; });
+    setEditingRoleIndex(null);
   };
 
   const copyHex = async (hex: string, i: number) => {
@@ -227,84 +231,102 @@ export default function ColorPalette({ industry, initialPalette, onChange }: Col
       await navigator.clipboard.writeText(hex);
       setCopiedIndex(i);
       setTimeout(() => setCopiedIndex(null), 1500);
-    } catch {
-      // fallback
-    }
+    } catch { /* noop */ }
   };
 
   const switchPalette = (idx: number) => {
     setPaletteIndex(idx);
-    setColors(
-      availablePalettes[idx]
-        ? availablePalettes[idx].map((c, i) => (locked[i] ? colors[i] : c))
-        : Array.from({ length: 5 }, generateHarmoniousColor)
+    setColors(availablePalettes[idx]
+      ? availablePalettes[idx].map((c, i) => locked[i] ? colors[i] : c)
+      : generateHarmoniousPalette()
     );
   };
 
   return (
     <div className="color-palette">
       <div className="color-palette__swatches">
-        {colors.map((color, i) => (
-          <div
-            key={i}
-            className={`color-swatch ${locked[i] ? 'color-swatch--locked' : ''}`}
-          >
-            <div
-              className="color-swatch__block"
-              style={{ backgroundColor: color }}
-              onClick={() => startEdit(i)}
-            >
-              <button
-                type="button"
-                className="color-swatch__lock"
-                onClick={(e) => { e.stopPropagation(); toggleLock(i); }}
-                title={locked[i] ? 'Desbloquear' : 'Bloquear color'}
-                aria-label={locked[i] ? 'Desbloquear color' : 'Bloquear color'}
+        {colors.map((color, i) => {
+          const scale = generateColorScale(color);
+          return (
+            <div key={i} className={`color-swatch ${locked[i] ? 'color-swatch--locked' : ''}`}>
+              <div
+                className="color-swatch__block"
+                style={{ backgroundColor: color }}
+                onClick={() => startEdit(i)}
               >
-                {locked[i] ? (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-                  </svg>
-                ) : (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 1C9.24 1 7 3.24 7 6v1H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2h-1V6c0-2.76-2.24-5-5-5zm0 2c1.71 0 3 1.29 3 3v1H9V6c0-1.71 1.29-3 3-3zm0 9c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z"/>
-                  </svg>
-                )}
-              </button>
-              <button
-                type="button"
-                className="color-swatch__copy"
-                style={{ color: getContrastColor(color) }}
-                onClick={(e) => { e.stopPropagation(); copyHex(color, i); }}
-                title="Copiar HEX"
-              >
-                {copiedIndex === i ? 'Copiado' : 'Copiar'}
-              </button>
-            </div>
+                <button
+                  type="button"
+                  className="color-swatch__lock"
+                  onClick={e => { e.stopPropagation(); toggleLock(i); }}
+                  title={locked[i] ? 'Desbloquear' : 'Bloquear color'}
+                  aria-label={locked[i] ? 'Desbloquear color' : 'Bloquear color'}
+                >
+                  {locked[i] ? (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                    </svg>
+                  ) : (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 1C9.24 1 7 3.24 7 6v1H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2h-1V6c0-2.76-2.24-5-5-5zm0 2c1.71 0 3 1.29 3 3v1H9V6c0-1.71 1.29-3 3-3zm0 9c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z"/>
+                    </svg>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  className="color-swatch__copy"
+                  style={{ color: getContrastColor(color) }}
+                  onClick={e => { e.stopPropagation(); copyHex(color, i); }}
+                  title="Copiar HEX"
+                >
+                  {copiedIndex === i ? 'Copiado' : 'Copiar'}
+                </button>
+              </div>
 
-            <div className="color-swatch__hex">
-              {editingIndex === i ? (
-                <input
-                  ref={inputRef}
-                  className="color-swatch__hex-input"
-                  value={editValue}
-                  onChange={(e) => setEditValue(e.target.value)}
-                  onBlur={commitEdit}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') commitEdit();
-                    if (e.key === 'Escape') setEditingIndex(null);
-                  }}
-                  maxLength={7}
-                  spellCheck={false}
-                />
-              ) : (
-                <span onClick={() => startEdit(i)} title="Editar HEX">
-                  {color}
-                </span>
-              )}
+              {/* Tints/shades scale strip */}
+              <div className="color-swatch__scale">
+                {scale.map((s, j) => (
+                  <div key={j} className="color-swatch__scale-dot" style={{ backgroundColor: s }} />
+                ))}
+              </div>
+
+              {/* HEX editor */}
+              <div className="color-swatch__hex">
+                {editingIndex === i ? (
+                  <input
+                    ref={inputRef}
+                    className="color-swatch__hex-input"
+                    value={editValue}
+                    onChange={e => setEditValue(e.target.value)}
+                    onBlur={commitEdit}
+                    onKeyDown={e => { if (e.key === 'Enter') commitEdit(); if (e.key === 'Escape') setEditingIndex(null); }}
+                    maxLength={7}
+                    spellCheck={false}
+                  />
+                ) : (
+                  <span onClick={() => startEdit(i)} title="Editar HEX">{color}</span>
+                )}
+              </div>
+
+              {/* Role name editor */}
+              <div className="color-swatch__role" title="Clic para editar el rol">
+                {editingRoleIndex === i ? (
+                  <input
+                    ref={roleInputRef}
+                    className="color-swatch__role-input"
+                    value={editingRoleValue}
+                    onChange={e => setEditingRoleValue(e.target.value)}
+                    onBlur={commitRoleEdit}
+                    onKeyDown={e => { if (e.key === 'Enter') commitRoleEdit(); if (e.key === 'Escape') setEditingRoleIndex(null); }}
+                    maxLength={16}
+                    spellCheck={false}
+                  />
+                ) : (
+                  <span onClick={() => startRoleEdit(i)}>{colorRoles[i]}</span>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="color-palette__controls">
@@ -314,8 +336,25 @@ export default function ColorPalette({ industry, initialPalette, onChange }: Col
           </svg>
           Generar paleta
         </button>
-        <span className="color-palette__hint">o presioná Espacio</span>
+        <span className="color-palette__hint">o Espacio · clic en el rol para renombrarlo</span>
 
+        {availablePalettes.length > 1 && (
+          <div style={{ display: 'flex', gap: 6, marginLeft: 'auto' }}>
+            {availablePalettes.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => switchPalette(idx)}
+                style={{
+                  width: 24, height: 8, borderRadius: 4, border: 'none', cursor: 'pointer',
+                  background: idx === paletteIndex ? 'var(--pur)' : 'var(--border2)',
+                  transition: 'background .15s',
+                }}
+                aria-label={`Paleta ${idx + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

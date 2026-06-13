@@ -7,7 +7,6 @@ interface FontPair {
   style: string;
 }
 
-// Pool global de pares curados (para selección aleatoria)
 const FONT_POOL: Array<{ heading: string; body: string; style: string; tags: string[] }> = [
   { heading: 'Playfair Display', body: 'Inter', style: 'Clásico + Moderno', tags: ['elegante', 'premium', 'clasico'] },
   { heading: 'Space Grotesk', body: 'DM Sans', style: 'Tech Moderno', tags: ['tech', 'moderno', 'startup'] },
@@ -31,7 +30,6 @@ const FONT_POOL: Array<{ heading: string; body: string; style: string; tags: str
   { heading: 'Cinzel', body: 'EB Garamond', style: 'Lujo Clásico', tags: ['clasico', 'lujo', 'premium'] },
 ];
 
-// Pesos por industria (índices del FONT_POOL que tienen preferencia)
 const INDUSTRY_WEIGHTS: Record<string, number[]> = {
   'Tecnología / Software': [1, 3, 7, 11, 14],
   'Salud y Bienestar': [2, 4, 6, 17],
@@ -48,22 +46,21 @@ const INDUSTRY_WEIGHTS: Record<string, number[]> = {
   'Otro': [0, 1, 14, 4, 9],
 };
 
+const AVAILABLE_WEIGHTS = [
+  { label: 'Light', value: '300' },
+  { label: 'Regular', value: '400' },
+  { label: 'Medium', value: '500' },
+  { label: 'Bold', value: '700' },
+  { label: 'Black', value: '900' },
+];
+
 function getRandomFontPair(industry: string, currentHeading: string): FontPair {
   const weights = INDUSTRY_WEIGHTS[industry] || INDUSTRY_WEIGHTS['Otro'];
-
-  let candidates: typeof FONT_POOL;
-  if (Math.random() < 0.7) {
-    // 70%: use industry-weighted pairs
-    candidates = weights.map((i) => FONT_POOL[i]);
-  } else {
-    // 30%: fully random from entire pool
-    candidates = [...FONT_POOL];
-  }
-
-  // Filter out current pair to avoid repetition
-  const filtered = candidates.filter((p) => p.heading !== currentHeading);
+  const candidates = Math.random() < 0.7
+    ? weights.map(i => FONT_POOL[i])
+    : [...FONT_POOL];
+  const filtered = candidates.filter(p => p.heading !== currentHeading);
   const pool = filtered.length > 0 ? filtered : candidates;
-
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
@@ -73,28 +70,28 @@ function getInitialFontPair(industry: string): FontPair {
   return FONT_POOL[idx];
 }
 
-function buildGoogleFontsUrl(pairs: FontPair[]): string {
+function buildGoogleFontsUrl(pairs: FontPair[], weights: string[]): string {
+  const wStr = [...weights].sort((a, b) => Number(a) - Number(b)).join(';');
   const families = new Set<string>();
-  pairs.forEach((p) => {
-    families.add(p.heading.replace(/ /g, '+') + ':wght@400;700;900');
-    families.add(p.body.replace(/ /g, '+') + ':wght@400;500;600');
+  pairs.forEach(p => {
+    families.add(p.heading.replace(/ /g, '+') + ':wght@' + wStr);
+    families.add(p.body.replace(/ /g, '+') + ':wght@' + wStr);
   });
-  return `https://fonts.googleapis.com/css2?${Array.from(families)
-    .map((f) => `family=${f}`)
-    .join('&')}&display=swap`;
+  return `https://fonts.googleapis.com/css2?${Array.from(families).map(f => `family=${f}`).join('&')}&display=swap`;
 }
 
 interface TypographyProps {
   brandName: string;
   industry: string;
   onChange?: (pair: FontPair) => void;
+  onWeightsChange?: (weights: string[]) => void;
 }
 
-export default function Typography({ brandName, industry, onChange }: TypographyProps) {
+export default function Typography({ brandName, industry, onChange, onWeightsChange }: TypographyProps) {
   const [currentPair, setCurrentPair] = useState<FontPair>(() => getInitialFontPair(industry));
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [selectedWeights, setSelectedWeights] = useState<string[]>(['400', '700']);
 
-  // Load Google Fonts dynamically whenever the pair changes
   useEffect(() => {
     const id = 'marca-google-fonts';
     let el = document.getElementById(id) as HTMLLinkElement | null;
@@ -104,11 +101,10 @@ export default function Typography({ brandName, industry, onChange }: Typography
       el.rel = 'stylesheet';
       document.head.appendChild(el);
     }
-    el.href = buildGoogleFontsUrl([currentPair]);
+    el.href = buildGoogleFontsUrl([currentPair], selectedWeights);
     el.onload = () => setFontsLoaded(true);
-    // If already cached it might not fire onload
     setTimeout(() => setFontsLoaded(true), 800);
-  }, [currentPair]);
+  }, [currentPair, selectedWeights]);
 
   const handleNext = () => {
     const next = getRandomFontPair(industry, currentPair.heading);
@@ -116,29 +112,29 @@ export default function Typography({ brandName, industry, onChange }: Typography
     onChange?.(next);
   };
 
-  useEffect(() => {
-    onChange?.(currentPair);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const toggleWeight = (value: string) => {
+    setSelectedWeights(prev => {
+      if (prev.includes(value)) {
+        if (prev.length === 1) return prev; // keep at least one
+        return prev.filter(w => w !== value);
+      }
+      return [...prev, value].sort((a, b) => Number(a) - Number(b));
+    });
+  };
+
+  useEffect(() => { onChange?.(currentPair); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { onWeightsChange?.(selectedWeights); }, [selectedWeights, onWeightsChange]);
 
   return (
     <div className={`typography-preview ${fontsLoaded ? 'typography-preview--loaded' : ''}`}>
       <div className="typography-preview__display">
-        <p
-          className="typography-preview__heading"
-          style={{ fontFamily: `'${currentPair.heading}', serif` }}
-        >
+        <p className="typography-preview__heading" style={{ fontFamily: `'${currentPair.heading}', serif` }}>
           {brandName || 'Tu Marca'}
         </p>
-        <p
-          className="typography-preview__subheading"
-          style={{ fontFamily: `'${currentPair.body}', sans-serif` }}
-        >
+        <p className="typography-preview__subheading" style={{ fontFamily: `'${currentPair.body}', sans-serif` }}>
           Subtítulo de ejemplo · Tagline de marca
         </p>
-        <p
-          className="typography-preview__body"
-          style={{ fontFamily: `'${currentPair.body}', sans-serif` }}
-        >
+        <p className="typography-preview__body" style={{ fontFamily: `'${currentPair.body}', sans-serif` }}>
           El texto de cuerpo usa esta tipografía para párrafos y descripciones. Legible, clara y alineada con la personalidad de la marca.
         </p>
       </div>
@@ -146,26 +142,50 @@ export default function Typography({ brandName, industry, onChange }: Typography
       <div className="typography-preview__meta">
         <div className="typography-preview__font-info">
           <div className="typography-preview__font-card">
-            <span className="typography-preview__font-role">Headlines</span>
-            <span
-              className="typography-preview__font-name"
-              style={{ fontFamily: `'${currentPair.heading}', serif` }}
-            >
+            <span className="typography-preview__font-role">Titular</span>
+            <span className="typography-preview__font-name" style={{ fontFamily: `'${currentPair.heading}', serif` }}>
               {currentPair.heading}
             </span>
           </div>
           <div className="typography-preview__font-divider">+</div>
           <div className="typography-preview__font-card">
-            <span className="typography-preview__font-role">Body</span>
-            <span
-              className="typography-preview__font-name"
-              style={{ fontFamily: `'${currentPair.body}', sans-serif` }}
-            >
+            <span className="typography-preview__font-role">Cuerpo</span>
+            <span className="typography-preview__font-name" style={{ fontFamily: `'${currentPair.body}', sans-serif` }}>
               {currentPair.body}
             </span>
           </div>
         </div>
         <span className="typography-preview__style-tag">{currentPair.style}</span>
+      </div>
+
+      {/* Weight samples */}
+      <div className="typography-preview__weights">
+        <span className="typography-preview__weight-label">Pesos</span>
+        {AVAILABLE_WEIGHTS.map(({ label, value }) => (
+          <button
+            key={value}
+            type="button"
+            className={`weight-chip ${selectedWeights.includes(value) ? 'weight-chip--active' : ''}`}
+            onClick={() => toggleWeight(value)}
+            title={`${label} ${value}`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* Weight specimen rows */}
+      <div style={{ padding: '0 40px 20px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {selectedWeights.map(w => (
+          <div key={w} style={{ display: 'flex', alignItems: 'baseline', gap: 16, padding: '6px 0', borderBottom: '1px solid var(--border)' }}>
+            <span style={{ fontSize: 10, color: 'var(--dim)', width: 64, flexShrink: 0, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase' }}>
+              {AVAILABLE_WEIGHTS.find(ww => ww.value === w)?.label} {w}
+            </span>
+            <span style={{ fontFamily: `'${currentPair.heading}', serif`, fontWeight: Number(w), fontSize: 17, color: 'var(--text)', letterSpacing: '-.01em' }}>
+              Aa Bb Cc Dd Ee · 0 1 2 3 4 5
+            </span>
+          </div>
+        ))}
       </div>
 
       <div className="typography-preview__controls">

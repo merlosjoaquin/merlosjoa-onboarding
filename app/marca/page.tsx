@@ -19,13 +19,14 @@ export default function MarcaPage() {
   const [pageState, setPageState] = useState<PageState>('form');
   const [formData, setFormData] = useState<BrandFormData | null>(null);
   const [colors, setColors] = useState<string[]>([]);
+  const [colorRoles, setColorRoles] = useState<string[]>(['Primario 1', 'Primario 2', 'Acento', 'Fondo', 'Tipografía']);
   const [fonts, setFonts] = useState<FontPair>({ heading: 'Playfair Display', body: 'Inter', style: '' });
+  const [fontWeights, setFontWeights] = useState<string[]>(['400', '700']);
   const [texts, setTexts] = useState<Record<string, string>>({});
 
   const handleFormSubmit = (data: BrandFormData) => {
     setFormData(data);
     setPageState('generated');
-    // Scroll to top smoothly
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -33,6 +34,8 @@ export default function MarcaPage() {
     setPageState('form');
     setFormData(null);
     setColors([]);
+    setColorRoles(['Primario 1', 'Primario 2', 'Acento', 'Fondo', 'Tipografía']);
+    setFontWeights(['400', '700']);
     setTexts({});
   };
 
@@ -40,8 +43,16 @@ export default function MarcaPage() {
     setColors(newColors);
   }, []);
 
+  const handleRolesChange = useCallback((newRoles: string[]) => {
+    setColorRoles(newRoles);
+  }, []);
+
   const handleFontsChange = useCallback((pair: FontPair) => {
     setFonts(pair);
+  }, []);
+
+  const handleWeightsChange = useCallback((newWeights: string[]) => {
+    setFontWeights(newWeights);
   }, []);
 
   const handleTextsChange = useCallback((newTexts: Record<string, string>) => {
@@ -101,6 +112,7 @@ export default function MarcaPage() {
               <ColorPalette
                 industry={formData.industry}
                 onChange={handleColorsChange}
+                onRolesChange={handleRolesChange}
               />
             </div>
           </section>
@@ -119,6 +131,7 @@ export default function MarcaPage() {
                 brandName={formData.name}
                 industry={formData.industry}
                 onChange={handleFontsChange}
+                onWeightsChange={handleWeightsChange}
               />
             </div>
           </section>
@@ -156,7 +169,9 @@ export default function MarcaPage() {
                   name: formData.name,
                   industry: formData.industry,
                   colors: colors.length === 5 ? colors : ['#0F172A', '#1E3A5F', '#2563EB', '#38BDF8', '#F8FAFC'],
+                  colorRoles,
                   fonts,
+                  fontWeights,
                   texts,
                 }}
                 onReset={handleReset}
