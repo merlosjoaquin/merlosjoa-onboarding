@@ -182,7 +182,7 @@ export default function Typography({ brandName, industry, onChange, onWeightsCha
               {AVAILABLE_WEIGHTS.find(ww => ww.value === w)?.label} {w}
             </span>
             <span style={{ fontFamily: `'${currentPair.heading}', serif`, fontWeight: Number(w), fontSize: 17, color: 'var(--text)', letterSpacing: '-.01em' }}>
-              Aa Bb Cc Dd Ee · 0 1 2 3 4 5
+              Aa Bb Cc Dd Ee · 0 1 2 3 4 5 6 7 8 9
             </span>
           </div>
         ))}

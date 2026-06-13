@@ -338,23 +338,6 @@ export default function ColorPalette({ industry, initialPalette, onChange, onRol
         </button>
         <span className="color-palette__hint">o Espacio · clic en el rol para renombrarlo</span>
 
-        {availablePalettes.length > 1 && (
-          <div style={{ display: 'flex', gap: 6, marginLeft: 'auto' }}>
-            {availablePalettes.map((_, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => switchPalette(idx)}
-                style={{
-                  width: 24, height: 8, borderRadius: 4, border: 'none', cursor: 'pointer',
-                  background: idx === paletteIndex ? 'var(--pur)' : 'var(--border2)',
-                  transition: 'background .15s',
-                }}
-                aria-label={`Paleta ${idx + 1}`}
-              />
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

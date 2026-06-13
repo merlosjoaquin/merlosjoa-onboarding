@@ -143,7 +143,6 @@ function buildCoverPage(name: string, industry: string, colors: string[], accent
     ['01', 'Paleta de Colores'],
     ['02', 'Tipografía'],
     ['03', 'Identidad Verbal'],
-    ['04', 'Usos Incorrectos'],
   ].map(([n, t]) => `
     <div style="display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid #F1F5F9;">
       <span style="font-size:15px;color:#0F172A;font-weight:500;">${esc(t)}</span>
@@ -365,7 +364,6 @@ export default function PdfExport({ brandData, onReset }: PdfExportProps) {
       const colorsCanvas   = await renderSection(buildColorsPage(colors, colorRoles, accent));
       const typoCanvas     = await renderSection(buildTypographyPage(brandData.fonts, weights, accent));
       const identityCanvas = hasTexts ? await renderSection(buildIdentityPage(brandData.texts, accent)) : null;
-      const rulesCanvas    = await renderSection(buildRulesPage(accent));
 
       document.head.removeChild(gfLink);
 
@@ -376,7 +374,7 @@ export default function PdfExport({ brandData, onReset }: PdfExportProps) {
       const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [pw(coverCanvas), ph(coverCanvas)], compress: true });
       pdf.addImage(toImg(coverCanvas), 'JPEG', 0, 0, pw(coverCanvas), ph(coverCanvas));
 
-      for (const canvas of [colorsCanvas, typoCanvas, identityCanvas, rulesCanvas]) {
+      for (const canvas of [colorsCanvas, typoCanvas, identityCanvas]) {
         if (!canvas) continue;
         pdf.addPage([pw(canvas), ph(canvas)]);
         pdf.addImage(toImg(canvas), 'JPEG', 0, 0, pw(canvas), ph(canvas));
