@@ -49,7 +49,7 @@ export default function Brief() {
               </h2>
             </div>
             <div className="brief-intro-note">
-              <strong>Todo lo que escribas es confidencial.</strong> No hay longitud mínima ni máxima. Completá con la mayor honestidad posible — cuanto más contexto, más precisa la estrategia. Estimá entre 15 y 25 minutos.
+              <strong>Todo lo que escribas es confidencial.</strong> No hay longitud mínima ni máxima. Completá con la mayor honestidad posible. Cuanto más contexto, más precisa la estrategia. Estimá entre 15 y 25 minutos.
             </div>
           </div>
 
@@ -149,9 +149,9 @@ export default function Brief() {
               <span className="fsec-desc">Hacia dónde vamos</span>
             </div>
             <div className="field">
-              <label htmlFor="q04_3meses">¿Qué querés lograr en los próximos 3 meses?</label>
+              <label htmlFor="q04_3meses">¿Qué querés lograr en los próximos 4 meses?</label>
               <span className="hint">Ej: 1000 seguidores, 5 clientes nuevos, lanzar producto...</span>
-              <textarea id="q04_3meses" name="q04_3meses" placeholder="Objetivos concretos y medibles a 3 meses" />
+              <textarea id="q04_3meses" name="q04_3meses" placeholder="Objetivos concretos y medibles a 4 meses" />
             </div>
             <div className="row2">
               <div className="field">

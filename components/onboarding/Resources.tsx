@@ -151,7 +151,7 @@ export default function Resources() {
             Plantillas y guías<br />
             <em>listas para usar.</em>
           </h2>
-          <p>Herramientas concretas que te ahorran horas. Para avanzar solo antes de contratar un servicio completo.</p>
+          <p>Herramientas para avanzar solo antes de contratar un servicio completo.</p>
         </div>
       </div>
 
